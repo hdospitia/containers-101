@@ -1,0 +1,11 @@
+FROM node:20 as build-env
+WORKDIR /app
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+RUN npm install
+COPY . .
+
+FROM gcr.io/distroless/nodejs20-debian12
+copy --from=build-env /app /app
+CMD [ "/app/server.js" ]
